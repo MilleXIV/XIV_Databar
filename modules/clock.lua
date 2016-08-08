@@ -50,9 +50,11 @@ clockFrame:SetScript('OnUpdate', function(self, e)
 				clockText:SetText(hour..":"..minu)
 				amText:SetText("")	
 			else
-				if hour > 12 then 
+				if hour > 12 then
 					hour = hour - 12
-					hour = ("0"..hour)
+					if hour < 10 then
+						hour = ("0"..hour)
+					end
 					AmPmTimeText = "PM"
 				else 
 					AmPmTimeText = "AM"
