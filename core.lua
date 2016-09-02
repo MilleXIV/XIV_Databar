@@ -326,7 +326,7 @@ function XIVBar:GetGeneralOptions()
         values = {TOP = L['Top'], BOTTOM = L['Bottom']},
         style = "dropdown",
         get = function() return self.db.profile.general.barPosition; end,
-        set = function(info, value) self.db.profile.general.barPosition = value; self:Refresh(); end,
+        set = function(info, value) self.db.profile.general.barPosition = value; if value == "BOTTOM" then self.db.profile.general.ohHide = false end self:Refresh(); end,
       },
       barCC = {
         name = L['Use Class Colors for Bar'],
@@ -367,12 +367,12 @@ function XIVBar:GetGeneralOptions()
         set = function(info, val) self.db.profile.general.moduleSpacing = val; self:Refresh(); end
       },
 	  ohHide = {
-		name = "Hide order hall bar",
+		name = L['Hide order hall bar'],
 		type = "toggle",
 		order = 2,
 		hidden = function() return self.db.profile.general.barPosition == "BOTTOM" end,
 		get = function() return self.db.profile.general.ohHide end,
-		set = function(_,val) self.db.profile.general.ohHide = val; print("opt refresh"); self:Refresh(); end
+		set = function(_,val) self.db.profile.general.ohHide = val; self:Refresh(); end
 	  }
     }
   }
