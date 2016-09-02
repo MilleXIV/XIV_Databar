@@ -256,6 +256,7 @@ function XIVBar:Refresh()
 		b:SetScript("OnShow", b.Hide)
 		b:Hide()
 	end
+	BuffFrame:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -205, 0 - self.frames.bar:GetHeight());
   end
 
   local barColor = self.db.profile.color.barColor

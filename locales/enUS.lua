@@ -17,6 +17,7 @@ L['Bar Color'] = true;
 L['Use Class Colors for Bar'] = true;
 L['Bar Padding'] = true;
 L['Module Spacing'] = true;
+L['Hide order hall bar'] = true;
 
 -- Positioning Options
 L['Positioning Options'] = true;
