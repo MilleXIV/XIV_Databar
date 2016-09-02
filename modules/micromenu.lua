@@ -119,6 +119,8 @@ function MenuModule:Refresh()
     self.bgTexture[name]:SetPoint('CENTER', frame, 'CENTER')
     if xb.db.profile.modules.microMenu.hideSocialText then
       frame:Hide()
+	else
+	  frame:Show()
     end
   end
 end
