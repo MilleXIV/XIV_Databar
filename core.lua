@@ -14,7 +14,8 @@ XIVBar.defaults = {
       moduleSpacing = 30,
       barFullscreen = true,
       barWidth = GetScreenWidth(),
-      barHoriz = 'CENTER'
+      barHoriz = 'CENTER',
+	  ohHide = true
     },
     color = {
       barColor = {
@@ -243,13 +244,17 @@ function XIVBar:Refresh()
   if self.frames.bar == nil then return; end
 
   self.miniTextPosition = "TOP"
-  if b and not b:IsVisible() and self.OHBarHide then
+  if b and not b:IsVisible() and self.db.profile.general.ohHide and self.OHBarHide then
 	b:SetScript("OnShow", b.Show)
+	self.OHBarHide = false
+  end
+  if b and not b:IsVisible() and not self.db.profile.general.ohHide then
+    b:SetScript("OnShow", b.Show)
 	self.OHBarHide = false
   end
   if self.db.profile.general.barPosition == 'TOP' then
     self.miniTextPosition = 'BOTTOM'
-	if b and b:IsVisible() then
+	if b and b:IsVisible() and self.db.profile.general.ohHide then
 		b:UnregisterAllEvents()
 		b:SetScript("OnShow", b.Hide)
 		b:Hide()
@@ -364,7 +369,15 @@ function XIVBar:GetGeneralOptions()
         step = 1,
         get = function() return self.db.profile.general.moduleSpacing; end,
         set = function(info, val) self.db.profile.general.moduleSpacing = val; self:Refresh(); end
-      }
+      },
+	  ohHide = {
+		name = "Hide order hall bar",
+		type = "toggle",
+		order = 2,
+		hidden = function() return self.db.profile.general.barPosition == "BOTTOM" end,
+		get = function() return self.db.profile.general.ohHide end,
+		set = function(_,val) self.db.profile.general.ohHide = val; if not val then self.OHBarHide=false end;self:Refresh(); end
+	  }
     }
   }
 end
