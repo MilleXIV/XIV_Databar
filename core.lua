@@ -240,25 +240,21 @@ end
 
 function XIVBar:Refresh()
   local b = OrderHallCommandBar
+  local inOrderHall = C_Garrison.IsPlayerInGarrison(LE_GARRISON_TYPE_7_0);
 
   if self.frames.bar == nil then return; end
 
   self.miniTextPosition = "TOP"
-  if b and not b:IsVisible() and self.db.profile.general.ohHide and self.OHBarHide then
-	b:SetScript("OnShow", b.Show)
-	self.OHBarHide = false
+  if b and not self.db.profile.general.ohHide and inOrderHall then
+	b:SetScript("OnShow", b.OnShow)
+	b:SetShown(inOrderHall)
   end
-  if b and not b:IsVisible() and not self.db.profile.general.ohHide then
-    b:SetScript("OnShow", b.Show)
-	self.OHBarHide = false
-  end
+  
   if self.db.profile.general.barPosition == 'TOP' then
     self.miniTextPosition = 'BOTTOM'
-	if b and b:IsVisible() and self.db.profile.general.ohHide then
-		b:UnregisterAllEvents()
+	if b and inOrderHall and b:IsVisible() and self.db.profile.general.ohHide then
 		b:SetScript("OnShow", b.Hide)
 		b:Hide()
-		self.OHBarHide = true
 	end
   end
 
@@ -376,7 +372,7 @@ function XIVBar:GetGeneralOptions()
 		order = 2,
 		hidden = function() return self.db.profile.general.barPosition == "BOTTOM" end,
 		get = function() return self.db.profile.general.ohHide end,
-		set = function(_,val) self.db.profile.general.ohHide = val; if not val then self.OHBarHide=false end;self:Refresh(); end
+		set = function(_,val) self.db.profile.general.ohHide = val; print("opt refresh"); self:Refresh(); end
 	  }
     }
   }
