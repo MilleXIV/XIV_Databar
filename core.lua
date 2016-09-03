@@ -37,6 +37,7 @@ XIVBar.defaults = {
         a = 0.25
       },
       useCC = false,
+	  useTextCC = false,
       useHoverCC = true,
       hover = {
         r = 1,
@@ -486,21 +487,32 @@ function XIVBar:GetTextColorOptions()
         width = "double",
         hasAlpha = true,
         set = function(info, r, g, b, a)
-          XIVBar:SetColor('normal', r, g, b, a)
+			if self.db.profile.color.useTextCC then
+				r,g,b,_=XIVBar:GetColor('normal')
+			end
+			XIVBar:SetColor('normal', r, g, b, a)
         end,
         get = function() return XIVBar:GetColor('normal') end
       }, -- normal
+	  textCC = {
+		name = L["Use Class Color for Text"],
+		desc = L["Only the alpha can be set with the color picker"],
+		type = "toggle",
+		order = 2,
+		set = function(_,val) if val then XIVBar:SetColor("normal",RAID_CLASS_COLORS[self.constants.playerClass].r,RAID_CLASS_COLORS[self.constants.playerClass].g,RAID_CLASS_COLORS[self.constants.playerClass].b,select(4,XIVBar:GetColor('normal'))) end self.db.profile.color.useTextCC = val end,
+		get = function() return self.db.profile.color.useTextCC end
+	  },
       hoverCC = {
         name = L['Use Class Colors for Hover'],
         type = "toggle",
-        order = 2,
+        order = 3,
         set = function(info, val) self.db.profile.color.useHoverCC = val; self:Refresh(); end,
         get = function() return self.db.profile.color.useHoverCC end
       }, -- normal
       inactive = {
         name = L['Inactive'],
         type = "color",
-        order = 3,
+        order = 4,
         hasAlpha = true,
         width = "double",
         set = function(info, r, g, b, a)
@@ -511,7 +523,7 @@ function XIVBar:GetTextColorOptions()
       hover = {
         name = L['Hover'],
         type = "color",
-        order = 4,
+        order = 5,
         hasAlpha = true,
         set = function(info, r, g, b, a)
           XIVBar:SetColor('hover', r, g, b, a)
