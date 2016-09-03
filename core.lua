@@ -14,7 +14,8 @@ XIVBar.defaults = {
       moduleSpacing = 30,
       barFullscreen = true,
       barWidth = GetScreenWidth(),
-      barHoriz = 'CENTER'
+      barHoriz = 'CENTER',
+	  ohHide = true
     },
     color = {
       barColor = {
@@ -36,6 +37,7 @@ XIVBar.defaults = {
         a = 0.25
       },
       useCC = false,
+	  useTextCC = false,
       useHoverCC = true,
       hover = {
         r = 1,
@@ -238,11 +240,24 @@ function XIVBar:GetHeight()
 end
 
 function XIVBar:Refresh()
+  local b = OrderHallCommandBar
+  local inOrderHall = C_Garrison.IsPlayerInGarrison(LE_GARRISON_TYPE_7_0);
+
   if self.frames.bar == nil then return; end
 
   self.miniTextPosition = "TOP"
+  if b and not self.db.profile.general.ohHide and inOrderHall then
+	b:SetScript("OnShow", b.OnShow)
+	b:SetShown(inOrderHall)
+  end
+  
   if self.db.profile.general.barPosition == 'TOP' then
     self.miniTextPosition = 'BOTTOM'
+	if b and inOrderHall and b:IsVisible() and self.db.profile.general.ohHide then
+		b:SetScript("OnShow", b.Hide)
+		b:Hide()
+	end
+	-- BuffFrame:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -205, 0 - self.frames.bar:GetHeight());
   end
 
   local barColor = self.db.profile.color.barColor
@@ -313,7 +328,7 @@ function XIVBar:GetGeneralOptions()
         values = {TOP = L['Top'], BOTTOM = L['Bottom']},
         style = "dropdown",
         get = function() return self.db.profile.general.barPosition; end,
-        set = function(info, value) self.db.profile.general.barPosition = value; self:Refresh(); end,
+        set = function(info, value) self.db.profile.general.barPosition = value; if value == "BOTTOM" then self.db.profile.general.ohHide = false end self:Refresh(); end,
       },
       barCC = {
         name = L['Use Class Colors for Bar'],
@@ -352,7 +367,15 @@ function XIVBar:GetGeneralOptions()
         step = 1,
         get = function() return self.db.profile.general.moduleSpacing; end,
         set = function(info, val) self.db.profile.general.moduleSpacing = val; self:Refresh(); end
-      }
+      },
+	  ohHide = {
+		name = L['Hide order hall bar'],
+		type = "toggle",
+		order = 2,
+		hidden = function() return self.db.profile.general.barPosition == "BOTTOM" end,
+		get = function() return self.db.profile.general.ohHide end,
+		set = function(_,val) self.db.profile.general.ohHide = val; self:Refresh(); end
+	  }
     }
   }
 end
@@ -464,21 +487,32 @@ function XIVBar:GetTextColorOptions()
         width = "double",
         hasAlpha = true,
         set = function(info, r, g, b, a)
-          XIVBar:SetColor('normal', r, g, b, a)
+			if self.db.profile.color.useTextCC then
+				r,g,b,_=XIVBar:GetColor('normal')
+			end
+			XIVBar:SetColor('normal', r, g, b, a)
         end,
         get = function() return XIVBar:GetColor('normal') end
       }, -- normal
+	  textCC = {
+		name = L["Use Class Color for Text"],
+		desc = L["Only the alpha can be set with the color picker"],
+		type = "toggle",
+		order = 2,
+		set = function(_,val) if val then XIVBar:SetColor("normal",RAID_CLASS_COLORS[self.constants.playerClass].r,RAID_CLASS_COLORS[self.constants.playerClass].g,RAID_CLASS_COLORS[self.constants.playerClass].b,select(4,XIVBar:GetColor('normal'))) end self.db.profile.color.useTextCC = val end,
+		get = function() return self.db.profile.color.useTextCC end
+	  },
       hoverCC = {
         name = L['Use Class Colors for Hover'],
         type = "toggle",
-        order = 2,
+        order = 3,
         set = function(info, val) self.db.profile.color.useHoverCC = val; self:Refresh(); end,
         get = function() return self.db.profile.color.useHoverCC end
       }, -- normal
       inactive = {
         name = L['Inactive'],
         type = "color",
-        order = 3,
+        order = 4,
         hasAlpha = true,
         width = "double",
         set = function(info, r, g, b, a)
@@ -489,7 +523,7 @@ function XIVBar:GetTextColorOptions()
       hover = {
         name = L['Hover'],
         type = "color",
-        order = 4,
+        order = 5,
         hasAlpha = true,
         set = function(info, r, g, b, a)
           XIVBar:SetColor('hover', r, g, b, a)

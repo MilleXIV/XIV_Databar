@@ -150,7 +150,8 @@ function TalentModule:Refresh()
 end
 
 function TalentModule:UpdateArtifactBar(artifactId)
-  return;
+	
+  if true then return end 
   local _, artifactData = self.LAD:GetArtifactInfo(artifactId)
   self.specBar:SetMinMaxValues(0, artifactData.maxPower)
   self.specBar:SetValue(artifactData.power)
