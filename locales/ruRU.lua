@@ -59,7 +59,7 @@ L['Open Clock'] = "Открыть часы";
 L['Hide Event Text'] = "Скрыть текст событий";
 
 L['Travel'] = "Перемещение";
-L['Port Options'] = true;
+L['Port Options'] = "Назначение телепорта";
 L['Ready'] = "Готово";
 L['Travel Cooldowns'] = "Способности для перемещения";
 L['Change Port Option'] = "Изменить назначение телепорта";
