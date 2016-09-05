@@ -1,6 +1,6 @@
 local AddOnName, Engine = ...;
 local AceLocale = LibStub:GetLibrary("AceLocale-3.0");
-local L = AceLocale:NewLocale(AddOnName, "ruRU", true, false);
+local L = AceLocale:NewLocale(AddOnName, "ruRU");
 
 L['Modules'] = "Модули";
 L['Left-Click'] = "Левая кнопка мыши";
