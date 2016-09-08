@@ -14,6 +14,7 @@ L['Bar Color'] = "Leistenfarbe";
 L['Use Class Colors for Bar'] = "Benutze Klassenfarbe für Leiste";
 L['Bar Padding'] = "Leistenabstand";
 L['Module Spacing'] = "Modulabstand";
+L['Hide order hall bar'] = true;
 
 -- Positioning Options
 L['Positioning Options'] = "Positions-Optionen";
@@ -31,6 +32,8 @@ L['Text Style'] = "Schriftstil";
 -- Text Colors
 L['Text Colors'] = "Textfarbe";
 L['Normal'] = "Normal";
+L['Use Class Color for Text'] = true;
+L['Only the alpha can be set with the color picker'] = true;
 L['Inactive'] = "Inaktiv";
 L['Use Class Colors for Hover'] = "Benutze Klassenfarbe für Mouseover";
 L['Hover'] = "Mouseover";
