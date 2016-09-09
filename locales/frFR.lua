@@ -1,6 +1,7 @@
 local AddOnName, Engine = ...;
 local AceLocale = LibStub:GetLibrary("AceLocale-3.0");
-local L = AceLocale:NewLocale(AddOnName, "frFR", true, false);
+local L = AceLocale:NewLocale(AddOnName, "frFR", false, false);
+if not L then return end
 
 L['Modules'] = "Modules";
 L['Left-Click'] = "Clic gauche";
