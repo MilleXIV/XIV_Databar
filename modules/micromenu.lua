@@ -124,31 +124,96 @@ function MenuModule:Refresh()
 end
 
 function MenuModule:CreateFrames()
-  self.frames.menu = self.frames.menu or CreateFrame("BUTTON", nil, xb:GetFrame('microMenuFrame'))
+  parentFrame = xb:GetFrame('microMenuFrame')
+
+  if xb.db.profile.modules.microMenu.showMenuButton then
+    self.frames.menu = self.frames.menu or CreateFrame("BUTTON", nil, parentFrame)
+    parentFrame = self.frames.menu
+  end
 
   --self.frames.socialParent = self.frames.socialParent or CreateFrame("FRAME", nil, self.frames.menu)
-  self.frames.chat = self.frames.chat or CreateFrame("BUTTON", nil, self.frames.menu)
-  self.frames.guild = self.frames.guild or CreateFrame("BUTTON", nil, self.frames.chat)
-  self.frames.social = self.frames.social or CreateFrame("BUTTON", nil, self.frames.guild)
+
+  if xb.db.profile.modules.microMenu.showChatButton then
+    self.frames.chat = self.frames.chat or CreateFrame("BUTTON", nil, parentFrame)
+    parentFrame = self.frames.chat
+  end
+
+  if xb.db.profile.modules.microMenu.showGuildButton then
+    self.frames.guild = self.frames.guild or CreateFrame("BUTTON", nil, parentFrame)
+    parentFrame = self.frames.guild
+  end
+
+  if xb.db.profile.modules.microMenu.showSocialButton then
+    self.frames.social = self.frames.social or CreateFrame("BUTTON", nil, parentFrame)
+    parentFrame = self.frames.social
+  end
 
   --self.frames.microbar = self.frames.microbar or CreateFrame("FRAME", nil, self.frames.social)
-  self.frames.char = self.frames.char or CreateFrame("BUTTON", nil, self.frames.social)
-  self.frames.spell = self.frames.spell or CreateFrame("BUTTON", nil, self.frames.char)
-  self.frames.talent = self.frames.talent or CreateFrame("BUTTON", nil, self.frames.spell)
-  self.frames.ach = self.frames.ach or CreateFrame("BUTTON", nil, self.frames.talent)
-  self.frames.quest = self.frames.quest or CreateFrame("BUTTON", nil, self.frames.ach)
-  self.frames.lfg = self.frames.lfg or CreateFrame("BUTTON", nil, self.frames.quest)
-  self.frames.journal = self.frames.journal or CreateFrame("BUTTON", nil, self.frames.lfg)
-  self.frames.pvp = self.frames.pvp or CreateFrame("BUTTON", nil, self.frames.journal)
-  self.frames.pet = self.frames.pet or CreateFrame("BUTTON", nil, self.frames.pvp)
-  self.frames.shop = self.frames.shop or CreateFrame("BUTTON", nil, self.frames.pet)
-  self.frames.help = self.frames.help or CreateFrame("BUTTON", nil, self.frames.shop)
 
-  self.text.guild = self.text.guild or self.frames.guild:CreateFontString(nil, 'OVERLAY')
-  self.bgTexture.guild = self.bgTexture.guild or self.frames.guild:CreateTexture(nil, "OVERLAY")
+  if xb.db.profile.modules.microMenu.showCharButton then
+    self.frames.char = self.frames.char or CreateFrame("BUTTON", nil, parentFrame)
+    parentFrame = self.frames.char
+  end
 
-  self.text.social = self.text.social or self.frames.social:CreateFontString(nil, 'OVERLAY')
-  self.bgTexture.social = self.bgTexture.social or self.frames.social:CreateTexture(nil, "OVERLAY")
+  if xb.db.profile.modules.microMenu.showSpellButton then
+    self.frames.spell = self.frames.spell or CreateFrame("BUTTON", nil, parentFrame)
+    parentFrame = self.frames.spell
+  end
+
+  if xb.db.profile.modules.microMenu.showTalentButton then
+    self.frames.talent = self.frames.talent or CreateFrame("BUTTON", nil, parentFrame)
+    parentFrame = self.frames.talent
+  end
+
+  if xb.db.profile.modules.microMenu.showAchButton then
+    self.frames.ach = self.frames.ach or CreateFrame("BUTTON", nil, parentFrame)
+    parentFrame = self.frames.ach
+  end
+
+  if xb.db.profile.modules.microMenu.showQuestButton then
+    self.frames.quest = self.frames.quest or CreateFrame("BUTTON", nil, parentFrame)
+    parentFrame = self.frames.quest
+  end
+
+  if xb.db.profile.modules.microMenu.showLfgButton then
+    self.frames.lfg = self.frames.lfg or CreateFrame("BUTTON", nil, parentFrame)
+    parentFrame = self.frames.lfg
+  end
+
+  if xb.db.profile.modules.microMenu.showJournalButton then
+    self.frames.journal = self.frames.journal or CreateFrame("BUTTON", nil, parentFrame)
+    parentFrame = self.frames.journal
+  end
+
+  if xb.db.profile.modules.microMenu.showPvpButton then
+    self.frames.pvp = self.frames.pvp or CreateFrame("BUTTON", nil, parentFrame)
+    parentFrame = self.frames.pvp
+  end
+
+  if xb.db.profile.modules.microMenu.showPetButton then
+    self.frames.pet = self.frames.pet or CreateFrame("BUTTON", nil, parentFrame)
+    parentFrame = self.frames.pet
+  end
+
+  if xb.db.profile.modules.microMenu.showShopButton then
+    self.frames.shop = self.frames.shop or CreateFrame("BUTTON", nil, parentFrame)
+    parentFrame = self.frames.shop
+  end
+
+  if xb.db.profile.modules.microMenu.showHelpButton then
+    self.frames.help = self.frames.help or CreateFrame("BUTTON", nil, parentFrame)
+    parentFrame = self.frames.help
+  end
+
+  if xb.db.profile.modules.microMenu.showGuildButton then
+    self.text.guild = self.text.guild or self.frames.guild:CreateFontString(nil, 'OVERLAY')
+    self.bgTexture.guild = self.bgTexture.guild or self.frames.guild:CreateTexture(nil, "OVERLAY")
+  end
+
+  if xb.db.profile.modules.microMenu.showSocialButton then
+    self.text.social = self.text.social or self.frames.social:CreateFontString(nil, 'OVERLAY')
+    self.bgTexture.social = self.bgTexture.social or self.frames.social:CreateTexture(nil, "OVERLAY")
+  end
 end
 
 function MenuModule:CreateIcons()
@@ -236,6 +301,7 @@ function MenuModule:UnregisterFrameEvents()
 end
 
 function MenuModule:UpdateGuildText(isEvent)
+  if not xb.db.profile.modules.microMenu.showGuildButton then return; end
   if xb.db.profile.modules.microMenu.hideSocialText then return; end
   if isEvent == nil then
     GuildRoster()
@@ -251,6 +317,7 @@ function MenuModule:UpdateGuildText(isEvent)
 end
 
 function MenuModule:UpdateFriendText()
+  if not xb.db.profile.modules.microMenu.showSocialButton then return; end
   if xb.db.profile.modules.microMenu.hideSocialText then return; end
   local _, bnOnlineMembers = BNGetNumFriends()
   local _, friendsOnline = GetNumFriends()
@@ -527,7 +594,22 @@ function MenuModule:GetDefaultOptions()
       showTooltips = true,
       mainMenuSpacing = 2,
       iconSpacing = 2,
-      hideSocialText = false
+      hideSocialText = false,
+      showMenuButton = true,
+      showChatButton = true,
+      showGuildButton = true,
+      showSocialButton = true,
+      showCharButton = true,
+      showSpellButton = true,
+      showTalentButton = true,
+      showAchButton = true,
+      showQuestButton = true,
+      showLfgButton = true,
+      showJournalButton = true,
+      showPvpButton = true,
+      showPetButton = true,
+      showShopButton = true,
+      showHelpButton = true
     }
 end
 
@@ -583,6 +665,120 @@ function MenuModule:GetConfig()
         step = 1,
         get = function() return xb.db.profile.modules.microMenu.iconSpacing; end,
         set = function(_, val) xb.db.profile.modules.microMenu.iconSpacing = val; self:Refresh(); end
+      },
+      buttons = {
+        type = 'group',
+        name = L['Show/Hide Buttons'],
+        order = 5,
+        inline = true,
+        args = {
+          showMenuButton = {
+            name = L['Show Menu Button'],
+            disabled = true,
+            order = 1,
+            type = "toggle",
+            get = function() return xb.db.profile.modules.microMenu.showMenuButton; end,
+            set = function(_, val) xb.db.profile.modules.microMenu.showMenuButton = val; self:Refresh(); end
+          },
+          showChatButton = {
+            name = L['Show Chat Button'],
+            order = 2,
+            type = "toggle",
+            get = function() return xb.db.profile.modules.microMenu.showChatButton; end,
+            set = function(_, val) xb.db.profile.modules.microMenu.showChatButton = val; self:Refresh(); end
+          },
+          showGuildButton = {
+            name = L['Show Guild Button'],
+            order = 3,
+            type = "toggle",
+            get = function() return xb.db.profile.modules.microMenu.showGuildButton; end,
+            set = function(_, val) xb.db.profile.modules.microMenu.showGuildButton = val; self:Refresh(); end
+          },
+          showSocialButton = {
+            name = L['Show Social Button'],
+            order = 4,
+            type = "toggle",
+            get = function() return xb.db.profile.modules.microMenu.showSocialButton; end,
+            set = function(_, val) xb.db.profile.modules.microMenu.showSocialButton = val; self:Refresh(); end
+          },
+          showCharButton = {
+            name = L['Show Character Button'],
+            order = 5,
+            type = "toggle",
+            get = function() return xb.db.profile.modules.microMenu.showCharButton; end,
+            set = function(_, val) xb.db.profile.modules.microMenu.showCharButton = val; self:Refresh(); end
+          },
+          showSpellButton = {
+            name = L['Show Spellbook Button'],
+            order = 6,
+            type = "toggle",
+            get = function() return xb.db.profile.modules.microMenu.showSpellButton; end,
+            set = function(_, val) xb.db.profile.modules.microMenu.showSpellButton = val; self:Refresh(); end
+          },
+          showTalentButton = {
+            name = L['Show Talents Button'],
+            order = 7,
+            type = "toggle",
+            get = function() return xb.db.profile.modules.microMenu.showTalentButton; end,
+            set = function(_, val) xb.db.profile.modules.microMenu.showTalentButton = val; self:Refresh(); end
+          },
+          showAchButton = {
+            name = L['Show Achievements Button'],
+            order = 8,
+            type = "toggle",
+            get = function() return xb.db.profile.modules.microMenu.showAchButton; end,
+            set = function(_, val) xb.db.profile.modules.microMenu.showAchButton = val; self:Refresh(); end
+          },
+          showQuestButton = {
+            name = L['Show Quests Button'],
+            order = 9,
+            type = "toggle",
+            get = function() return xb.db.profile.modules.microMenu.showQuestButton; end,
+            set = function(_, val) xb.db.profile.modules.microMenu.showQuestButton = val; self:Refresh(); end
+          },
+          showLfgButton = {
+            name = L['Show LFG Button'],
+            order = 10,
+            type = "toggle",
+            get = function() return xb.db.profile.modules.microMenu.showLfgButton; end,
+            set = function(_, val) xb.db.profile.modules.microMenu.showLfgButton = val; self:Refresh(); end
+          },
+          showJournalButton = {
+            name = L['Show Journal Button'],
+            order = 11,
+            type = "toggle",
+            get = function() return xb.db.profile.modules.microMenu.showJournalButton; end,
+            set = function(_, val) xb.db.profile.modules.microMenu.showJournalButton = val; self:Refresh(); end
+          },
+          showPvpButton = {
+            name = L['Show PVP Button'],
+            order = 12,
+            type = "toggle",
+            get = function() return xb.db.profile.modules.microMenu.showPvpButton; end,
+            set = function(_, val) xb.db.profile.modules.microMenu.showPvpButton = val; self:Refresh(); end
+          },
+          showPetButton = {
+            name = L['Show Pets Button'],
+            order = 13,
+            type = "toggle",
+            get = function() return xb.db.profile.modules.microMenu.showPetButton; end,
+            set = function(_, val) xb.db.profile.modules.microMenu.showPetButton = val; self:Refresh(); end
+          },
+          showShopButton = {
+            name = L['Show Shop Button'],
+            order = 14,
+            type = "toggle",
+            get = function() return xb.db.profile.modules.microMenu.showShopButton; end,
+            set = function(_, val) xb.db.profile.modules.microMenu.showShopButton = val; self:Refresh(); end
+          },
+          showHelpButton = {
+            name = L['Show Help Button'],
+            order = 15,
+            type = "toggle",
+            get = function() return xb.db.profile.modules.microMenu.showHelpButton; end,
+            set = function(_, val) xb.db.profile.modules.microMenu.showHelpButton = val; self:Refresh(); end
+          }
+        }
       }
     }
   }
