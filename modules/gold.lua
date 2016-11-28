@@ -40,7 +40,7 @@ end
 function GoldModule:Refresh()
   local db = xb.db.profile
   if self.goldFrame == nil then return; end
-  if not db.modules.gold.enabled then return; end
+  if not db.modules.gold.enabled then self:Disable(); return; end
 
   if InCombatLockdown() then
     self.goldText:SetFont(xb:GetFont(db.text.fontSize))
@@ -79,6 +79,7 @@ function GoldModule:Refresh()
     self.bagText:SetPoint('LEFT', self.goldText, 'RIGHT', 5, 0)
     bagWidth = self.bagText:GetStringWidth()
   else
+	self.bagText:SetFont(xb:GetFont(db.text.fontSize))
     self.bagText:SetText('')
     self.bagText:SetSize(0, 0)
   end
@@ -90,11 +91,13 @@ function GoldModule:Refresh()
 
   local relativeAnchorPoint = 'LEFT'
   local xOffset = db.general.moduleSpacing
-  if not xb:GetFrame('travelFrame'):IsVisible() then
+  local parentFrame = xb:GetFrame('travelFrame')
+  if not xb.db.profile.modules.travel.enabled then
+    parentFrame = self.goldFrame:GetParent()
     relativeAnchorPoint = 'RIGHT'
     xOffset = 0
   end
-  self.goldFrame:SetPoint('RIGHT', xb:GetFrame('travelFrame'), relativeAnchorPoint, -(xOffset), 0)
+  self.goldFrame:SetPoint('RIGHT', parentFrame, relativeAnchorPoint, -(xOffset), 0)
 end
 
 function GoldModule:CreateFrames()
@@ -179,6 +182,18 @@ function GoldModule:PLAYER_MONEY()
   self:Refresh()
 end
 
+local function shortenNumber(num)
+	if num < 1000 then
+		return tostring(num)
+	elseif num < 1000000 then
+		return format("%.1fK",num/1000)
+	elseif num < 1000000000 then
+		return format("%.2fM",num/1000000)
+	else
+		return format("%.3fB",num/1000000000)
+	end
+end
+
 function GoldModule:FormatCoinText(money)
   local showSC = xb.db.profile.modules.gold.showSmallCoins
   local shortThousands = xb.db.profile.modules.gold.shortThousands
@@ -187,8 +202,7 @@ function GoldModule:FormatCoinText(money)
   if g > 0 then
     formattedString = '%s'..GOLD_AMOUNT_SYMBOL
     if g > 1000 and shortThousands then
-      g = floor(abs(g / 1000))
-      formattedString = '%s'..FIRST_NUMBER_CAP_NO_SPACE..GOLD_AMOUNT_SYMBOL
+      formattedString = shortenNumber(g)..GOLD_AMOUNT_SYMBOL
     end
   end
   if s > 0 and (g < 1 or showSC) then
@@ -210,6 +224,7 @@ function GoldModule:FormatCoinText(money)
   end
   return ret
 end
+
 function GoldModule:SeparateCoins(money)
   local gold, silver, copper = floor(abs(money / 10000)), floor(abs(mod(money / 100, 100))), floor(abs(mod(money, 100)))
   return gold, silver, copper

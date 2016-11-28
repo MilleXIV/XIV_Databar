@@ -64,7 +64,7 @@ end
 function ClockModule:Refresh()
   local db = xb.db.profile
   if self.clockFrame == nil then return; end
-  if not db.modules.clock.enabled then return; end
+  if not db.modules.clock.enabled then self:Disable(); return; end
 
   if InCombatLockdown() then
     self:SetClockColor()
@@ -105,7 +105,7 @@ function ClockModule:RegisterFrameEvents()
     if ClockModule.elapsed >= 1 then
       local clockTime = nil
       if xb.db.profile.modules.clock.serverTime then
-        clockTime = GetServerTime()
+        clockTime = GetServerTime() -- GameTime_GetGameTime() ?
       else
         clockTime = time()
       end

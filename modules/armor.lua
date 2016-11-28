@@ -28,13 +28,13 @@ end
 
 function ArmorModule:OnEnable()
   if self.armorFrame == nil then
-    self.armorFrame = CreateFrame("FRAME", nil, xb:GetFrame('bar'))
+    self.armorFrame = CreateFrame("FRAME", AUCTION_CATEGORY_ARMOR, xb:GetFrame('bar'))
     xb:RegisterFrame('armorFrame', self.armorFrame)
   end
   self.armorFrame:Show()
   self:CreateFrames()
   self:RegisterFrameEvents()
-  self:Refresh()
+  xb:Refresh()
 end
 
 function ArmorModule:OnDisable()
@@ -53,22 +53,26 @@ function ArmorModule:RegisterFrameEvents()
   self.armorButton:RegisterUnitEvent('UNIT_INVENTORY_CHANGED', 'player')
 
   self.armorButton:SetScript('OnEnter', function()
-    ArmorModule:SetArmorColor()
-    GameTooltip:SetOwner(ArmorModule.armorFrame, 'ANCHOR_'..xb.miniTextPosition)
-    GameTooltip:AddLine("[|cff6699FF"..AUCTION_CATEGORY_ARMOR.."|r]")
-    GameTooltip:AddLine(" ")
-    for i,v in pairs(ArmorModule.durabilityList) do
-      if v.max ~= nil and v.max > 0 then
-        local perc = floor((v.cur / v.max)  * 100)
-        GameTooltip:AddDoubleLine(v.text, string.format('%d/%d (%d%%)', v.cur, v.max, perc), 1, 1, 0, 1, 1, 1)
-      end
-    end
-    GameTooltip:Show()
+	if not InCombatLockdown() then
+		ArmorModule:SetArmorColor()
+		GameTooltip:SetOwner(ArmorModule.armorFrame, 'ANCHOR_'..xb.miniTextPosition)
+		GameTooltip:AddLine("[|cff6699FF"..AUCTION_CATEGORY_ARMOR.."|r]")
+		GameTooltip:AddLine(" ")
+		for i,v in pairs(ArmorModule.durabilityList) do
+		  if v.max ~= nil and v.max > 0 then
+			local perc = floor((v.cur / v.max)  * 100)
+			GameTooltip:AddDoubleLine(v.text, string.format('%d/%d (%d%%)', v.cur, v.max, perc), 1, 1, 0, 1, 1, 1)
+		  end
+		end
+		GameTooltip:Show()
+	end
   end)
 
   self.armorButton:SetScript('OnLeave', function()
-    self:SetArmorColor()
-    GameTooltip:Hide()
+	if not InCombatLockdown() then
+		self:SetArmorColor()
+		GameTooltip:Hide()
+	end
   end)
 
   self.armorButton:SetScript('OnEvent', function(_, event)
@@ -108,7 +112,7 @@ end
 
 function ArmorModule:Refresh()
   if self.armorFrame == nil then return; end
-  if not xb.db.profile.modules.armor.enabled then return; end
+  if not xb.db.profile.modules.armor.enabled then self:Disable(); return; end
 
   if InCombatLockdown() then
     self:UpdateDurabilityText()
@@ -130,13 +134,16 @@ function ArmorModule:Refresh()
 
   local relativeAnchorPoint = 'RIGHT'
   local xOffset = xb.db.profile.general.moduleSpacing
-  if not xb:GetFrame('microMenuFrame'):IsVisible() then
+
+  local parentFrame = xb:GetFrame('microMenuFrame');
+  if not xb.db.profile.modules.microMenu.enabled then
+	parentFrame = self.armorFrame:GetParent()
     relativeAnchorPoint = 'LEFT'
     xOffset = 0
   end
 
   self.armorFrame:ClearAllPoints()
-  self.armorFrame:SetPoint('LEFT', xb:GetFrame('microMenuFrame'), relativeAnchorPoint, xOffset, 0)
+  self.armorFrame:SetPoint('LEFT', parentFrame, relativeAnchorPoint, xOffset, 0)
   self:SetArmorColor()
 end
 
@@ -200,6 +207,7 @@ function ArmorModule:GetConfig()
             self:Enable()
           else
             self:Disable()
+			xb:Refresh()
           end
         end
       },

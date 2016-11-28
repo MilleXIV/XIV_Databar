@@ -7,13 +7,17 @@ L['Left-Click'] = true;
 L['Right-Click'] = true;
 
 -- General
+L["Positioning"] = true;
 L['Bar Position'] = true;
 L['Top'] = true;
 L['Bottom'] = true;
 L['Bar Color'] = true;
-L['Use Class Colors for Bar'] = true;
+L['Use Class Color for Bar'] = true;
+L["Miscellaneous"] = true;
+L['Hide Bar in combat'] = true;
 L['Bar Padding'] = true;
 L['Module Spacing'] = true;
+L['Hide order hall bar'] = true;
 
 -- Positioning Options
 L['Positioning Options'] = true;
@@ -29,9 +33,12 @@ L['Small Font Size'] = true;
 L['Text Style'] = true;
 
 -- Text Colors
+L["Colors"] = true;
 L['Text Colors'] = true;
 L['Normal'] = true;
 L['Inactive'] = true;
+L["Use Class Color for Text"] = true;
+L["Only the alpha can be set with the color picker"] = true;
 L['Use Class Colors for Hover'] = true;
 L['Hover'] = true;
 
@@ -43,11 +50,34 @@ L['Main Menu Icon Right Spacing'] = true;
 L['Icon Spacing'] = true;
 L['Open Guild Page'] = true;
 L['No Tag'] = true;
+L['Whisper BNet'] = true;
+L['Whisper Character'] = true;
 L['Hide Social Text'] = true;
+L["GMOTD in Tooltip"] = true;
+L["Modifier for friend invite"] = true;
+L['Show/Hide Buttons'] = true;
+L['Show Menu Button'] = true;
+L['Show Chat Button'] = true;
+L['Show Guild Button'] = true;
+L['Show Social Button'] = true;
+L['Show Character Button'] = true;
+L['Show Spellbook Button'] = true;
+L['Show Talents Button'] = true;
+L['Show Achievements Button'] = true;
+L['Show Quests Button'] = true;
+L['Show LFG Button'] = true;
+L['Show Journal Button'] = true;
+L['Show PVP Button'] = true;
+L['Show Pets Button'] = true;
+L['Show Shop Button'] = true;
+L['Show Help Button'] = true;
 
 L['Always Show Item Level'] = true;
 L['Minimum Durability to Become Active'] = true;
 L['Maximum Durability to Show Item Level'] = true;
+
+L['Master Volume'] = true;
+L["Volume step"] = true;
 
 L['Time Format'] = true;
 L['Use Server Time'] = true;
